@@ -61,7 +61,7 @@ const SignUpPage = () => {
 
         <div className="text-center mb-8">
           <h2 className="text-3xl font-extrabold text-white">Create an Account</h2>
-          <p className="text-gray-400 mt-2">Join our CodexChat today!</p>
+          <p className="text-gray-400 mt-2">Join our CodeXChat today!</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSubmit}>
