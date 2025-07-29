@@ -4,57 +4,37 @@ import { Camera, Mail, User } from "lucide-react";
 import toast from "react-hot-toast";
 
 const ProfilePage = () => {
-  const { authUser, isUpdatingProfile, updateProfile, logout } = useAuthStore();
+  const {
+    authUser,
+    isUpdatingProfile,
+    updateProfile,
+    logout,
+    deleteAccount,
+    isDeletingAccount,
+  } = useAuthStore();
+
   const [selectedImg, setSelectedImg] = useState(null);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
-
     reader.readAsDataURL(file);
-
     reader.onload = async () => {
       const base64Image = reader.result;
       setSelectedImg(base64Image);
       await updateProfile({ profilePic: base64Image });
     };
   };
-const handleDeleteAccount = async () => {
-  const confirmDelete = window.confirm(
-    "Are you sure you want to delete your account? This action cannot be undone."
-  );
-  if (!confirmDelete) return;
 
-  setIsDeleting(true);
-  try {
-    const response = await fetch('http://localhost:5001/api/auth/delete-account', {
-      method: "DELETE",
-      credentials: "include", // ensure this if your backend uses HTTP-only cookies for auth
-      headers: {
-        "Content-Type": "application/json",
-        // Add Authorization header here if you use JWT tokens in the header
-        // "Authorization": `Bearer ${yourToken}`,
-      },
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to delete account");
-    }
-
-    toast.success("Account deleted successfully");
-    logout();
-    // Optionally redirect: window.location.href = "/login";
-  } catch (error) {
-    toast.error(error.message);
-  } finally {
-    setIsDeleting(false);
-  }
-};
-
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete your account? This action cannot be undone."
+    );
+    if (!confirmDelete) return;
+    await deleteAccount(); // Call zustand action
+    // Navigation/redirect after deletion happens in the store or you can add here
+  };
 
   return (
     <div className="h-screen pt-20">
@@ -63,9 +43,7 @@ const handleDeleteAccount = async () => {
           <div className="text-center">
             <h1 className="text-2xl font-semibold ">Profile</h1>
           </div>
-
           {/* avatar upload section */}
-
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
@@ -98,25 +76,26 @@ const handleDeleteAccount = async () => {
               {isUpdatingProfile ? "Uploading..." : "Click here to update your photo"}
             </p>
           </div>
-
           <div className="space-y-6">
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.fullName}</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+                {authUser?.fullName}
+              </p>
             </div>
-
             <div className="space-y-1.5">
               <div className="text-sm text-zinc-400 flex items-center gap-2">
                 <Mail className="w-4 h-4" />
                 Email Address
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.email}</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+                {authUser?.email}
+              </p>
             </div>
           </div>
-
           <div className="mt-6 bg-base-300 rounded-xl p-6">
             <h2 className="text-lg font-medium  mb-4">Account Info</h2>
             <div className="space-y-3 text-sm">
@@ -130,17 +109,16 @@ const handleDeleteAccount = async () => {
               </div>
             </div>
           </div>
-
           {/* Delete Account Button */}
           <div className="mt-8">
             <button
               onClick={handleDeleteAccount}
-              disabled={isDeleting}
+              disabled={isDeletingAccount}
               className="w-full btn btn-error text-white"
               type="button"
               title="Delete Account"
             >
-              {isDeleting ? "Deleting Account..." : "Delete Account"}
+              {isDeletingAccount ? "Deleting Account..." : "Delete Account"}
             </button>
           </div>
         </div>

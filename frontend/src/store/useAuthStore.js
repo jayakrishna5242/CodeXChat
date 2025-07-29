@@ -13,6 +13,7 @@ export const useAuthStore = create((set, get) => ({
   isCheckingAuth: true,
   onlineUsers: [],
   socket: null,
+  isDeletingAccount: false,  // new state for delete loading
 
   checkAuth: async () => {
     try {
@@ -36,7 +37,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success("Account created successfully");
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Signup failed");
     } finally {
       set({ isSigningUp: false });
     }
@@ -48,10 +49,9 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.post("/auth/login", data);
       set({ authUser: res.data });
       toast.success("Logged in successfully");
-
       get().connectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Login failed");
     } finally {
       set({ isLoggingIn: false });
     }
@@ -64,7 +64,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success("Logged out successfully");
       get().disconnectSocket();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Logout failed");
     }
   },
 
@@ -76,7 +76,7 @@ export const useAuthStore = create((set, get) => ({
       toast.success("Profile updated successfully");
     } catch (error) {
       console.log("error in update profile:", error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Profile update failed");
     } finally {
       set({ isUpdatingProfile: false });
     }
@@ -99,7 +99,29 @@ export const useAuthStore = create((set, get) => ({
       set({ onlineUsers: userIds });
     });
   },
+
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
+  },
+
+  // --- New Delete Account action ---
+  deleteAccount: async () => {
+    set({ isDeletingAccount: true });
+    try {
+      const response = await axiosInstance.delete("/auth/delete-account");
+      toast.success(response.data.message || "Account deleted successfully");
+
+      // Clear auth state and disconnect socket
+      set({ authUser: null });
+      get().disconnectSocket();
+
+      // Optionally: Redirect to login or homepage here, if you want
+      // window.location.href = "/login";
+    } catch (error) {
+      console.error("Delete account failed:", error);
+      toast.error(error.response?.data?.message || "Failed to delete account");
+    } finally {
+      set({ isDeletingAccount: false });
+    }
   },
 }));
