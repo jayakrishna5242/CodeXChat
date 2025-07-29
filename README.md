@@ -2,7 +2,6 @@
 
 ![Demo App](/frontend/public/generated-image.png)
 
-[Watch the Full Video Tutorial on YouTube](https://youtu.be/ntKkVrQqBYY)
 
 ---
 
