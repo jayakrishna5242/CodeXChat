@@ -22,38 +22,39 @@ const ProfilePage = () => {
       await updateProfile({ profilePic: base64Image });
     };
   };
+const handleDeleteAccount = async () => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete your account? This action cannot be undone."
+  );
+  if (!confirmDelete) return;
 
-  const handleDeleteAccount = async () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
-    );
-    if (!confirmDelete) return;
+  setIsDeleting(true);
+  try {
+    const response = await fetch('http://localhost:5001/api/auth/delete-account', {
+      method: "DELETE",
+      credentials: "include", // ensure this if your backend uses HTTP-only cookies for auth
+      headers: {
+        "Content-Type": "application/json",
+        // Add Authorization header here if you use JWT tokens in the header
+        // "Authorization": `Bearer ${yourToken}`,
+      },
+    });
 
-    setIsDeleting(true);
-    try {
-      const response = await fetch(`/api/users/${authUser._id}`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete account");
-      }
-
-      toast.success("Account deleted successfully");
-      logout();
-      // Optionally redirect after logout, e.g.:
-      // window.location.href = "/login";
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setIsDeleting(false);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to delete account");
     }
-  };
+
+    toast.success("Account deleted successfully");
+    logout();
+    // Optionally redirect: window.location.href = "/login";
+  } catch (error) {
+    toast.error(error.message);
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
 
   return (
     <div className="h-screen pt-20">
