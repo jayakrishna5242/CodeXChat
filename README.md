@@ -34,7 +34,7 @@ CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 
 NODE_ENV=development
 
-text
+
 
 > Replace the values on the right with your actual configuration data.
 
@@ -46,7 +46,7 @@ From your project root directory, run:
 
 npm run build
 
-text
+
 
 This will build the frontend React app and prepare the backend for production.
 
@@ -58,7 +58,7 @@ To start the backend server:
 
 npm start
 
-text
+
 
 This launches your backend API on the port specified in your `.env` (default: 5001), serving the frontend and connecting to the database.
 
@@ -71,12 +71,12 @@ For a better development experience, you may run the backend and frontend concur
 - Backend
 npm run dev
 
-text
+
 
 - Frontend
 npm start
 
-text
+
 
 ---
 
