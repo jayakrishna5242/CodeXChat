@@ -1,6 +1,6 @@
 # ✨ CodeXChat - Full Stack Realtime Chat App ✨
 
-![Demo App](/frontend/public/screenshot-for-readme.png)
+![Demo App](/frontend/public/generated-image.png)
 
 [Watch the Full Video Tutorial on YouTube](https://youtu.be/ntKkVrQqBYY)
 
