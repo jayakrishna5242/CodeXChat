@@ -37,10 +37,11 @@ const Sidebar = () => {
         <div className="flex items-center gap-2">
           <Users className="size-6" />
           <span className="font-medium hidden md:inline-block">Available Users</span>
-        </div>
+       
+       </div>
 
         {/* Search bar below label */}
-        <div className="flex-1 max-w-xs">
+        <div className="flex-1 max-w-xs m-1">
           <input
             type="text"
             placeholder="Search Users..."

@@ -90,7 +90,7 @@ const LoginPage = () => {
             />
           </div>
 
-          {/* Password Input */}
+          {/*   Input */}
           <div className="relative">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               {/* Lock SVG */}

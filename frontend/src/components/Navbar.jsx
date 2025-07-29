@@ -20,8 +20,8 @@ const Navbar = () => {
           className="flex items-center gap-4 hover:opacity-80 transition-all"
           aria-label="Go to homepage"
         >
-          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <img src="/generated-image.png" className="w-10 h-10 text-primary" />
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center m-">
+            <img src="/generated-image.png" className="w-10 h-10 text-primary " />
           </div>
           <h1 className="text-2xl font-bold select-none tracking-tight">CodexChat</h1>
         </Link>

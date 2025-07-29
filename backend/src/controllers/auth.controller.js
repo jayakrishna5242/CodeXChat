@@ -116,3 +116,26 @@ export const checkAuth = (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+
+
+export const deleteAccount = async (req, res) => {
+  try {
+    const userId = req.user._id; // req.user set by protectRoute middleware
+
+    // Delete the user document
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Optionally, you might want to clear authentication cookie here if you set cookies:
+    res.clearCookie("jwt");
+
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Error in deleteAccount controller:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
